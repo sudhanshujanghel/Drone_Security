@@ -1,0 +1,12 @@
+{
+    "name": "drone-security-analysis-tool",
+    "version": "0.0.1",
+    "description": "Comparison of Node.js template languages.",
+    "keywords": ["template", "benchmark"],
+    "author": "Sudhanshu Janghel<sudhanshu.janghel@gmail.com>",
+    "dependencies": {
+     "exec-sh":"^0.2.0",
+     "merge":"^1.2.0",
+     "concat-stream":"^1.4.8"
+    }
+}

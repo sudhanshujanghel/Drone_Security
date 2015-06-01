@@ -1,0 +1,53 @@
+
+// var spawn = require('child_process').spawn;
+// var nic = "wlan2";
+//obtain uid number of a user for spawing a new console command
+//var uidNumber = require("uid-number");
+// uidNumber("su", function (er, uid, gid) {
+//  console.log(uid); 
+// });
+
+//Check for monitor tools
+// var airmon_ng= spawn('airmon-ng');
+// airmon_ng.stdout.on('data', function (data) {
+//   nicList = data.toString().split("\n");
+//   //use for data binding
+//   console.log(nicList[0]);//.split("\t")[0]);
+// });
+
+//airmon start at the nic(var)
+// var airmon_ng_start = spawn('airmon-ng',['start',nic]).on('error',function(err){console.log(err);});
+// airmon_ng_start.stdout.on('data', function (data) {
+// console.log(data.toString());
+// });
+
+//inherit parent`s stdout stream
+// var airmon_ng_start = spawn('airodump-ng',['mon0'],{ stdio:['pipe', process.stdio, 'pipe']  })
+// .on('error',function(err){console.log(err);});
+// airmon_ng_start.stdout.on('data',function(){
+// airmon_ng_start.stdout.pipe(process.stdout);});
+
+"use strict";
+
+var app = require("express")();
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
+var Writable = require("stream").Writable;
+var BrowserStream = new Writable();
+
+// Create a server for the client to connect to
+server.listen(7777);
+
+BrowserStream._write = function(chunk, enc, next) {
+  var string = chunk.toString("utf8");
+
+  // Instead of logging to the console, write the data to a socket
+  io.sockets.emit("news", string);
+  next();
+};
+
+// We now can pipe stdin into BrowserStream
+process.stdin.pipe(BrowserStream);
+
+// We also pipe stdin to stdout so we can see it in the terminal
+process.stdin.pipe(process.stdout);
